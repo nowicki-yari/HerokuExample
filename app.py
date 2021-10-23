@@ -28,11 +28,14 @@ layout_page_1 = html.Div([
 app.layout = layout_page_1
 
 
+# Flask route (GET)
 @server.route('/hello')
 def hello():
     return "Hello world"
 
 
+# This function is triggered when the Input changes (so the dropdown menu in this case)
+# This function returns the figure to the output (dcc.Graph in this case)
 @app.callback(dash.dependencies.Output('display-value', 'figure'),
                 [dash.dependencies.Input('dropdown-time', 'value')])
 def display_value(value):
