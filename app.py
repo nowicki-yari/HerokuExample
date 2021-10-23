@@ -1,21 +1,20 @@
-import os
-
 import dash
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc
+from dash import html
 import plotly.express as px
 import pandas as pd
-pd.options.plotting.backend = "plotly"
+import flask
+
+server = flask.Flask(__name__)
 
 df = pd.read_csv('weather.csv')
-
+df = df.drop(['Pressure3pm', 'Pressure9am'], axis=1)
+pd.options.plotting.backend = "plotly"
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets, server=server)
 
-server = app.server
-
-app.layout = html.Div([
+layout_page_1 = html.Div([
     html.H2('Weather App prototype'),
     dcc.Dropdown(
         id='dropdown-time',
@@ -24,6 +23,14 @@ app.layout = html.Div([
     ),
     dcc.Graph(id='display-value')
 ])
+
+# index layout
+app.layout = layout_page_1
+
+
+@server.route('/hello')
+def hello():
+    return "Hello world"
 
 
 @app.callback(dash.dependencies.Output('display-value', 'figure'),
