@@ -39,9 +39,9 @@ def hello():
 @app.callback(dash.dependencies.Output('display-value', 'figure'),
                 [dash.dependencies.Input('dropdown-time', 'value')])
 def display_value(value):
+    # Next 2 lines are for data filtering, next 2 are for updating the graph
     df_filtered = df.filter(regex='{}$'.format(value), axis=1)
     df_filtered = df_filtered.drop(['WindDir{}'.format(value)], axis=1)
-    print(df_filtered)
     fig = px.line(df_filtered)
     fig.update_layout()
     return fig
